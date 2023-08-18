@@ -11,17 +11,15 @@ part 'bst_state.dart';
 class BstBloc extends Bloc<BstEvent, BstState> {
   late TreeNode root;
   
-  BstBloc() : root = TreeNode(null), super(BSTLoadedState(TreeNode(null))){
- on<AddValueEvent>(addValueEvent);
+  BstBloc() : root = TreeNode(null), super(BstNewValueAddedState(TreeNode(null))){
+ on<AddValueEvent>(addValueEvent);//event handling
   }
 
   FutureOr<void> addValueEvent(AddValueEvent event, Emitter<BstState> emit) {
-    // print(event.value);
-    // if (event == AddValueEvent) {
-          // print('is root${root.value}');
+   
 
       root.insert(event.value);
-      emit(BSTLoadedState(root));
-    // }
+      emit(BstNewValueAddedState(root));
+    
   }
 }

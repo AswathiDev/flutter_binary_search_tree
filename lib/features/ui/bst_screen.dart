@@ -81,7 +81,7 @@ if (_inputController.text.trim().isEmpty||inputVaidator) {
           ),
           BlocBuilder<BstBloc, BstState>(
             builder: (context, state) {
-              if (state is BSTLoadedState) {
+              if (state is BstNewValueAddedState) {
                 return Expanded(child: buildTreeWidget(state.root));
               }
               return  const Text('Loading...');
