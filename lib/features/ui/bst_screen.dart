@@ -12,29 +12,29 @@ class BstScreen extends StatefulWidget {
   State<BstScreen> createState() => _BstScreenState();
 }
 
-class _BstScreenState extends State<BstScreen> with TickerProviderStateMixin{
-    final TextEditingController _inputController = TextEditingController();
+class _BstScreenState extends State<BstScreen>  {
+  final TextEditingController _inputController = TextEditingController();
 
   late final BstBloc _bstBloc = BlocProvider.of<BstBloc>(context);
 
-@override
+  @override
   void initState() {
     super.initState();
   }
 
-void _addToTree(){
-      final enteredInput = int.parse(_inputController.text);
-          final inputVaidator = enteredInput < 0;
+  void _addToTree() {
+    final enteredInput = int.parse(_inputController.text);
+    final inputVaidator = enteredInput < 0;
 
-if (_inputController.text.trim().isEmpty||inputVaidator) {
+    if (_inputController.text.trim().isEmpty || inputVaidator) {
 //show error
 
       showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
                 title: const Text('Invalid Input'),
-                content: const Text(
-                    'Please make sure a valid number is entered'),
+                content:
+                    const Text('Please make sure a valid number is entered'),
                 actions: [
                   TextButton(
                       onPressed: () {
@@ -46,45 +46,43 @@ if (_inputController.text.trim().isEmpty||inputVaidator) {
               ));
       return;
     }
-     _bstBloc.add(AddValueEvent(enteredInput));
-                
-         _inputController.clear();
+    _bstBloc.add(AddValueEvent(enteredInput));
 
-}
+    _inputController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-   return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: const Text('Binary Search Tree'),
+        title: const Text('Binary Search Tree'),backgroundColor: Colors.blue,
       ),
       body: Column(
         children: [
           TextField(
             controller: _inputController,
             keyboardType: TextInputType.number,
-            decoration:const InputDecoration(labelText: 'Enter a value'),
+            decoration: const InputDecoration(labelText: 'Enter a value'),
           ),
+         const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: () {
               // final int value = int.parse(_inputController.text);
               // if (value != null) {
               //   _bstBloc.add(AddValueEvent(value));
-                
+
               //   _inputController.clear();
               // }
               _addToTree();
             },
-            child:const Text('Add to Tree'),
+            child: const Text('Add to Tree'),
           ),
           BlocBuilder<BstBloc, BstState>(
             builder: (context, state) {
               if (state is BstNewValueAddedState) {
                 return Expanded(child: buildTreeWidget(state.root));
               }
-              return  const Text('Loading...');
+              return const Text('Loading...');
             },
           ),
         ],
@@ -92,59 +90,67 @@ if (_inputController.text.trim().isEmpty||inputVaidator) {
     );
   }
 }
- Widget buildTreeWidget(TreeNode? node) {
+
+Widget buildTreeWidget(TreeNode? node) {
   if (node == null || node.value == null) {
-    return Container(decoration: const BoxDecoration(color: Colors.white),);
+    return Container(
+      decoration: const BoxDecoration(color: Colors.white),
+    );
   }
   return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 500), // Animation duration
-      builder: (context, value, child) {
-        return Opacity(
-      opacity: value,
-      child: SingleChildScrollView(
-        child: Column(
+    tween: Tween(begin: 0.0, end: 1.0),
+    duration: const Duration(milliseconds: 500), // Animation duration
+    builder: (context, value, child) {
+      return Opacity(
+        opacity: value,
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Container(padding:const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0), // Adjust the radius as needed
-                color: Colors.blue, // Set the background color
-              ),child: Text(node.value.toString(),style: const TextStyle(color: Colors.white),),),
-            // const  SizedBox(height: 20,),
-               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  
-                      //  buildTreeWidget(node.left),
-                      // const  SizedBox(width: 20), //
-                      //  buildTreeWidget(node.right),
-    
-                        if (node.left != null)
-                Column(
-                  children: [
-                   buildArrow(isLeftArrow: true),
-                    buildTreeWidget(node.left),
-                  ],
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                      20.0), // Adjust the radius as needed
+                  color: Colors.blue, // Set the background color
                 ),
-              const SizedBox(width: 20),
-              if (node.right != null)
-                Column(
-                  children: [
-                    buildArrow(isLeftArrow: false),
-                    buildTreeWidget(node.right),
-                  ],
+                child: Text(
+                  node.value.toString(),
+                  style: const TextStyle(color: Colors.white),
                 ),
-                   
-                  ],
-                ),
-              
+              ),
+              // const  SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //  buildTreeWidget(node.left),
+                  // const  SizedBox(width: 20), //
+                  //  buildTreeWidget(node.right),
+
+                  if (node.left != null)
+                    Column(
+                      children: [
+                        buildArrow(isLeftArrow: true),
+                        buildTreeWidget(node.left),
+                      ],
+                    ),
+                  const SizedBox(width: 20),
+                  if (node.right != null)
+                    Column(
+                      children: [
+                        buildArrow(isLeftArrow: false),
+                        buildTreeWidget(node.right),
+                      ],
+                    ),
+                ],
+              ),
             ],
-          
+          ),
         ),
-      ),
-    );},
+      );
+    },
   );
 }
+
 Widget buildArrow({required bool isLeftArrow}) {
   return SizedBox(
     width: 8,
