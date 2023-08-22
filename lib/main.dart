@@ -1,4 +1,4 @@
-import 'package:bst_evaluation_task/features/bloc/bloc/bst_bloc.dart';
+import 'package:bst_evaluation_task/features/bstBloc/bloc/bst_bloc.dart';
 import 'package:bst_evaluation_task/features/ui/bst_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
